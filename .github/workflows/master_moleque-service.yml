@@ -25,13 +25,17 @@ jobs:
         run: |
           npm install
           npm run build --if-present
-          npm run test --if-present
+          
+      # Zip artifacts to speed things up
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -qr
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: .
+          path: release.zip
+          retention-days: 1 day
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,4 +57,4 @@ jobs:
           app-name: 'moleque-service'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8A4E16A39FE64C5F90E3632DE3D5B49A }}
-          package: .
+          package: release.zip
