@@ -2,7 +2,7 @@ const express = require('express');
 const TestList = require('./liveSearch');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/MoleQue', {
+mongoose.connect('mongodb+srv://admin:Password29.@cluster0.0f0rj.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true, useUnifiedTopology: true
 });
 const db = mongoose.connection;
