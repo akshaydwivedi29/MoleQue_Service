@@ -19,13 +19,24 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/getTestList', async (req, res) => {
     let payload = req.body.payload;
     let search = await TestList.find({
+        // testname: {
+        //     $regex: new RegExp('^' + payload + '.*',
+        //         'i')
+        // }
         testname: {
-            $regex: new RegExp('^' + payload + '.*',
+            $regex: new RegExp(payload + '.*',
                 'i')
         }
     }).exec();
-    // Limit Search Results to 5
-    search = search.slice(0, 5);
+
+    res.send({ payload: search });
+});
+
+app.post('/getTestDetails', async (req, res) => {
+    let payload = req.body.payload;
+    let search = await TestList.findOne({
+        testcode: payload
+    }).exec();
 
     res.send({ payload: search });
 });
