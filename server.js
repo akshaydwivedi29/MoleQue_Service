@@ -16,17 +16,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
 app.post('/getTestList', async (req, res) => {
-    let payload = req.body.payload;
+    let payload = decodeURIComponent(req.body.payload);
+    payload = escapeRegExp(payload);
+    // console.log(payload);
     let search = await TestList.find({
-        // testname: {
-        //     $regex: new RegExp('^' + payload + '.*',
-        //         'i')
-        // }
-        testname: {
-            $regex: new RegExp(payload + '.*',
-                'i')
-        }
+        testname: { $regex: new RegExp(payload + '.*', 'i') }
     }).exec();
 
     res.send({ payload: search });
